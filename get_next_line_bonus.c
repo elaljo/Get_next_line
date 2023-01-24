@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moelalj <moelalj@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/02 18:42:46 by moelalj           #+#    #+#             */
-/*   Updated: 2023/01/19 18:06:35 by moelalj          ###   ########.fr       */
+/*   Created: 2023/01/23 18:09:38 by moelalj           #+#    #+#             */
+/*   Updated: 2023/01/24 09:07:03 by moelalj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*copy_to_xyata(char *str)
 {
@@ -92,21 +92,38 @@ char	*ft_read(char *all, int fd)
 
 char	*get_next_line(int fd)
 {
-	static char	*xyata;
+	static char	*xyata[OPEN_MAX];
 	char		*line;
 
 	if (fd == -1 || BUFFER_SIZE <= 0)
 		return (0);
-	xyata = ft_read(xyata, fd);
-	if (!xyata)
+	xyata[fd] = ft_read(xyata[fd], fd);
+	if (!xyata[fd])
 		return (0);
-	if (xyata[0] == '\0')
+	if (xyata[fd][0] == '\0')
 	{
-		free(xyata);
-		xyata = NULL;
-		return (xyata);
+		free(xyata[fd]);
+		xyata[fd] = NULL;
+		return (xyata[fd]);
 	}
-	line = cut(xyata);
-	xyata = copy_to_xyata(xyata);
+	line = cut(xyata[fd]);
+	xyata[fd] = copy_to_xyata(xyata[fd]);
 	return (line);
 }
+
+//#include<stdio.h>
+
+//int main()
+//{
+//	int	f1;
+//	int f2;
+
+//	f1 = open("t", O_RDONLY);
+//	f2 = open("x", O_RDONLY);
+//	printf("%s", get_next_line(f1));
+//	printf("%s", get_next_line(f2));
+//	printf("%s", get_next_line(f1));
+//	printf("%s", get_next_line(f1));
+//	printf("%s", get_next_line(f2));
+//	return (0);
+//}
